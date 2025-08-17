@@ -1,3 +1,4 @@
+#include <cmath>
 #include <iostream>
 
 // clang-format off
@@ -11,11 +12,8 @@ const char *vertex_shader_src = R"(
 
 layout (location = 0) in vec3 pos;
 
-out vec4 vertex_colour;
-
 void main() {
     gl_Position = vec4(pos, 1.0);
-    vertex_colour = vec4(0.5, 0.0, 0.0, 1.0);
 }
     )";
 
@@ -23,10 +21,10 @@ const char *fragment_shader_src = R"(
 #version 330 core
 
 out vec4 frag_colour;
-in vec4 vertex_colour;
+uniform vec4 colour;
 
 void main() {
-    frag_colour = vertex_colour;
+    frag_colour = colour;
 }
     )";
 
@@ -151,7 +149,14 @@ int main() {
 
         glClearColor(0.2f, 0.3f, 0.3f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT);
+
         glUseProgram(shader_program);
+
+        float time_value = glfwGetTime();
+        float green_value = (std::sin(time_value) / 2.0f) + 0.5f;
+        int vertex_colour_location = glGetUniformLocation(shader_program, "colour");
+        glUniform4f(vertex_colour_location, 0.0f, green_value, 0.0f, 1.0f);
+
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
