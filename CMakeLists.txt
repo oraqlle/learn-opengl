@@ -13,8 +13,14 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 
 find_package(glfw3 3.4 REQUIRED)
 
+option(WIREFRAME_MODE "Render using wireframe polygons" OFF)
+
 # ---- Declare executable ----
 add_executable(learn_opengl src/main.cxx src/glad.c)
 target_compile_features(learn_opengl PRIVATE c_std_99)
 target_link_libraries(learn_opengl PRIVATE glfw)
+
+if(WIREFRAME_MODE)
+    target_compile_definitions(learn_opengl PUBLIC -DWIREFRAME_MODE)
+endif(WIREFRAME_MODE)
 
