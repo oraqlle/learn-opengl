@@ -11,8 +11,11 @@ const char *vertex_shader_src = R"(
 
 layout (location = 0) in vec3 pos;
 
+out vec4 vertex_colour;
+
 void main() {
     gl_Position = vec4(pos, 1.0);
+    vertex_colour = vec4(0.5, 0.0, 0.0, 1.0);
 }
     )";
 
@@ -20,9 +23,10 @@ const char *fragment_shader_src = R"(
 #version 330 core
 
 out vec4 frag_colour;
+in vec4 vertex_colour;
 
 void main() {
-    frag_colour = vec4(1.0f, 0.5f, 0.2f, 1.0f);
+    frag_colour = vertex_colour;
 }
     )";
 
