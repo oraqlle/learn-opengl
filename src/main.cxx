@@ -1,11 +1,13 @@
 #include <cstdlib>
 #include <exception>
 #include <iostream>
-#include <memory>
 
 // clang-format off
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 // clang-format on
 
 #include <shader.h>
@@ -57,7 +59,23 @@ int main() {
         -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,  // left
          0.0f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f   // top
     };
+
+    float tex_coords[] = {
+        0.0f, 0.0f,  // lower-left corner
+        1.0f, 0.0f,  // lower-right corner
+        0.5f, 1.0f   // top-center corner
+    };
     // clang-format on
+
+    int width = 0;
+    int height = 0;
+    int nr_channels = 0;
+    unsigned char *tex_data = stbi_load("assets/container.jpg", &width, &height, &nr_channels, 0);
+    unsigned int texture = 0;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, tex_data);
+    glGenerateMipmap(GL_TEXTURE_2D);
 
     unsigned int VAO = 0;
     unsigned int VBO = 0;
