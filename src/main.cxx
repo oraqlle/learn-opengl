@@ -67,15 +67,25 @@ int main() {
     };
     // clang-format on
 
+    unsigned int texture = 0;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
     int width = 0;
     int height = 0;
     int nr_channels = 0;
     unsigned char *tex_data = stbi_load("assets/container.jpg", &width, &height, &nr_channels, 0);
-    unsigned int texture = 0;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, tex_data);
-    glGenerateMipmap(GL_TEXTURE_2D);
+
+    if (tex_data != NULL) {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, tex_data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    } else {
+        std::cerr << "Failed to load texture.\n";
+    }
 
     unsigned int VAO = 0;
     unsigned int VBO = 0;
@@ -116,6 +126,7 @@ int main() {
         glfwPollEvents();
     }
 
+    stbi_image_free(tex_data);
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
 
