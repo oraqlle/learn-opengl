@@ -73,25 +73,50 @@ int main() {
     };
     // clang-format on
 
-    unsigned int texture = 0;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
+    unsigned int texture0 = 0;
+    glGenTextures(1, &texture0);
+    glBindTexture(GL_TEXTURE_2D, texture0);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    int width = 0;
-    int height = 0;
-    int nr_channels = 0;
-    unsigned char *tex_data = stbi_load("assets/container.jpg", &width, &height, &nr_channels, 0);
+    int width0 = 0;
+    int height0 = 0;
+    int nr_channels0 = 0;
+    unsigned char *tex_data0 = stbi_load("assets/container.jpg", &width0, &height0, &nr_channels0, 0);
 
-    if (tex_data != NULL) {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, tex_data);
+    if (tex_data0 != NULL) {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width0, height0, 0, GL_RGB, GL_UNSIGNED_BYTE, tex_data0);
         glGenerateMipmap(GL_TEXTURE_2D);
     } else {
-        std::cerr << "Failed to load texture.\n";
+        std::cerr << "Failed to load texture0.\n";
     }
+
+    stbi_image_free(tex_data0);
+
+    unsigned int texture1 = 0;
+    glGenTextures(1, &texture1);
+    glBindTexture(GL_TEXTURE_2D, texture1);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    int width1 = 0;
+    int height1 = 0;
+    int nr_channels1 = 0;
+    stbi_set_flip_vertically_on_load(true);
+    unsigned char *tex_data1 = stbi_load("assets/awesomeface.png", &width1, &height1, &nr_channels1, 0);
+
+    if (tex_data1 != NULL) {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width1, height1, 0, GL_RGB, GL_UNSIGNED_BYTE, tex_data1);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    } else {
+        std::cerr << "Failed to load texture1.\n";
+    }
+
+    stbi_image_free(tex_data1);
 
     unsigned int VAO = 0;
     unsigned int VBO = 0;
@@ -126,15 +151,23 @@ int main() {
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 #endif // WIREFRAME_MODE
 
+    shader_program.use();
+    shader_program.set_uniform<int>("tex0", 0);
+    shader_program.set_uniform<int>("tex1", 1);
+
     while (!glfwWindowShouldClose(window)) {
         process_input(window);
 
         glClearColor(0.2f, 0.3f, 0.3f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture0);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, texture1);
+
         shader_program.use();
 
-        glBindTexture(GL_TEXTURE_2D, texture);
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
@@ -142,9 +175,9 @@ int main() {
         glfwPollEvents();
     }
 
-    stbi_image_free(tex_data);
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
 
     return 0;
 }
