@@ -171,13 +171,23 @@ int main() {
         glBindTexture(GL_TEXTURE_2D, texture1);
 
         float time = (float)glfwGetTime();
+        float scale = sin(time);
 
         glm::mat4 transform = glm::mat4(1.0f);
         transform = glm::translate(transform, glm::vec3(0.5f, -0.5f, 0.0f));
         transform = glm::rotate(transform, time, glm::vec3(0.0f, 0.0f, 1.0f));
 
+        glm::mat4 transform2 = glm::mat4(1.0f);
+        transform2 = glm::translate(transform2, glm::vec3(-0.5f, 0.5f, 0.0f));
+        transform2 = glm::scale(transform2, glm::vec3(scale, scale, 1.0f));
+
         shader_program.use();
         shader_program.set_uniform("transform", transform);
+
+        glBindVertexArray(VAO);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+        shader_program.set_uniform("transform", transform2);
 
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
