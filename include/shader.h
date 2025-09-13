@@ -21,7 +21,7 @@ public:
 
     // set uniforms in shaders
     template <typename U>
-    void set_uniform(std::string const& name, U value) const;
+    void set_uniform(std::string const&, U const&) const;
 };
 
 

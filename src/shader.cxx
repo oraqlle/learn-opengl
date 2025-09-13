@@ -1,5 +1,8 @@
 #include <shader.h>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #include <fstream>
 #include <filesystem>
 #include <iostream>
@@ -94,16 +97,62 @@ void Shader::use() {
 }
 
 template <>
-void Shader::set_uniform<bool>(std::string const& name, bool value) const {
+void Shader::set_uniform<bool>(std::string const& name, bool const& value) const {
     glUniform1i(glGetUniformLocation(ID, name.c_str()), static_cast<int>(value));
 }
 
 template <>
-void Shader::set_uniform<int>(std::string const& name, int value) const {
+void Shader::set_uniform<int>(std::string const& name, int const& value) const {
     glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
 }
 
 template <>
-void Shader::set_uniform<float>(std::string const& name, float value) const {
+void Shader::set_uniform<float>(std::string const& name, float const& value) const {
     glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
 }
+
+template <>
+void Shader::set_uniform<glm::vec2>(std::string const& name, glm::vec2 const& vec) const {
+    glUniform2fv(glGetUniformLocation(ID, name.c_str()), 1, glm::value_ptr(vec));
+}
+
+template <>
+void Shader::set_uniform<glm::vec3>(std::string const& name, glm::vec3 const& vec) const {
+    glUniform2fv(glGetUniformLocation(ID, name.c_str()), 1, glm::value_ptr(vec));
+}
+
+template <>
+void Shader::set_uniform<glm::vec4>(std::string const& name, glm::vec4 const& vec) const {
+    glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, glm::value_ptr(vec));
+}
+
+template <>
+void Shader::set_uniform<glm::mat2>(std::string const& name, glm::mat2 const& matrix) const {
+    glUniformMatrix2fv(
+        glGetUniformLocation(ID, name.c_str()),
+        1,
+        GL_FALSE,
+        glm::value_ptr(matrix)
+    );
+}
+
+template <>
+void Shader::set_uniform<glm::mat3>(std::string const& name, glm::mat3 const& matrix) const {
+    glUniformMatrix3fv(
+        glGetUniformLocation(ID, name.c_str()),
+        1,
+        GL_FALSE,
+        glm::value_ptr(matrix)
+    );
+}
+
+template <>
+void Shader::set_uniform<glm::mat4>(std::string const& name, glm::mat4 const& matrix) const {
+    glUniformMatrix4fv(
+        glGetUniformLocation(ID, name.c_str()),
+        1,
+        GL_FALSE,
+        glm::value_ptr(matrix)
+    );
+}
+

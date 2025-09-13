@@ -1,4 +1,3 @@
-#include "glm/detail/func_trigonometric.hpp"
 #include <cstdlib>
 #include <exception>
 #include <iostream>
@@ -157,8 +156,8 @@ int main() {
 #endif // WIREFRAME_MODE
 
     shader_program.use();
-    shader_program.set_uniform<int>("tex0", 0);
-    shader_program.set_uniform<int>("tex1", 1);
+    shader_program.set_uniform("tex0", 0);
+    shader_program.set_uniform("tex1", 1);
 
     while (!glfwWindowShouldClose(window)) {
         process_input(window);
@@ -178,9 +177,7 @@ int main() {
         transform = glm::rotate(transform, time, glm::vec3(0.0f, 0.0f, 1.0f));
 
         shader_program.use();
-
-        unsigned transform_loc = glGetUniformLocation(shader_program.ID, "transform");
-        glUniformMatrix4fv(transform_loc, 1, GL_FALSE, glm::value_ptr(transform));
+        shader_program.set_uniform("transform", transform);
 
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
