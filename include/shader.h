@@ -20,8 +20,17 @@ public:
     void use();
 
     // set uniforms in shaders
-    template <typename U>
-    void set_uniform(std::string const&, U const&) const;
+    template <typename T>
+    void set_uniform(std::string const&, T const&) const;
+
+    template <typename T>
+    void set_uniform(std::string const&, T const, T const) const;
+
+    template <typename T>
+    void set_uniform(std::string const&, T const, T const, T const) const;
+
+    template <typename T>
+    void set_uniform(std::string const&, T const, T const, T const, T const) const;
 };
 
 

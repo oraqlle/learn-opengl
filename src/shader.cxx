@@ -112,22 +112,64 @@ void Shader::set_uniform<float>(std::string const& name, float const& value) con
 }
 
 template <>
-void Shader::set_uniform<glm::vec2>(std::string const& name, glm::vec2 const& vec) const {
+void Shader::set_uniform<glm::vec2>(
+    std::string const& name,
+    glm::vec2 const& vec
+) const {
     glUniform2fv(glGetUniformLocation(ID, name.c_str()), 1, glm::value_ptr(vec));
 }
 
 template <>
-void Shader::set_uniform<glm::vec3>(std::string const& name, glm::vec3 const& vec) const {
+void Shader::set_uniform<float>(
+    std::string const& name,
+    float const x,
+    float const y
+) const {
+    glUniform2f(glGetUniformLocation(ID, name.c_str()), x, y);
+}
+
+template <>
+void Shader::set_uniform<glm::vec3>(
+    std::string const& name,
+    glm::vec3 const& vec
+) const {
     glUniform2fv(glGetUniformLocation(ID, name.c_str()), 1, glm::value_ptr(vec));
 }
 
 template <>
-void Shader::set_uniform<glm::vec4>(std::string const& name, glm::vec4 const& vec) const {
+void Shader::set_uniform<float>(
+    std::string const& name,
+    float const x,
+    float const y,
+    float const z
+) const {
+    glUniform3f(glGetUniformLocation(ID, name.c_str()), x, y, z);
+}
+
+template <>
+void Shader::set_uniform<glm::vec4>(
+    std::string const& name,
+    glm::vec4 const& vec)
+const {
     glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, glm::value_ptr(vec));
 }
 
 template <>
-void Shader::set_uniform<glm::mat2>(std::string const& name, glm::mat2 const& matrix) const {
+void Shader::set_uniform<float>(
+    std::string const& name,
+    float const x,
+    float const y,
+    float const z,
+    float const w
+) const {
+    glUniform4f(glGetUniformLocation(ID, name.c_str()), x, y, z, w);
+}
+
+template <>
+void Shader::set_uniform<glm::mat2>(
+    std::string const& name,
+    glm::mat2 const& matrix
+) const {
     glUniformMatrix2fv(
         glGetUniformLocation(ID, name.c_str()),
         1,
