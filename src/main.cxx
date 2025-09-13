@@ -171,7 +171,7 @@ int main() {
         glBindTexture(GL_TEXTURE_2D, texture1);
 
         float time = (float)glfwGetTime();
-        float scale = sin(time);
+        float scale = abs(sin(time)) + 0.1f;
 
         glm::mat4 transform = glm::mat4(1.0f);
         transform = glm::translate(transform, glm::vec3(0.5f, -0.5f, 0.0f));
