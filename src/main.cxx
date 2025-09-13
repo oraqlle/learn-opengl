@@ -1,3 +1,4 @@
+#include "glm/detail/func_trigonometric.hpp"
 #include <cstdlib>
 #include <exception>
 #include <iostream>
@@ -156,9 +157,9 @@ int main() {
 #endif // WIREFRAME_MODE
 
     glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
-    glm::mat4 trans = glm::mat4(1.0f);
-    trans = glm::translate(trans, glm::vec3(1.0f, 1.0f, 0.0f));
-    vec = trans * vec;
+    glm::mat4 transform = glm::mat4(1.0f);
+    transform = glm::rotate(transform, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
+    transform = glm::scale(transform, glm::vec3(0.5, 0.5, 0.5));
 
     std::cout << vec.x
               << ", "
@@ -170,6 +171,9 @@ int main() {
     shader_program.use();
     shader_program.set_uniform<int>("tex0", 0);
     shader_program.set_uniform<int>("tex1", 1);
+
+    unsigned transform_loc = glGetUniformLocation(shader_program.ID, "transform");
+    glUniformMatrix4fv(transform_loc, 1, GL_FALSE, glm::value_ptr(transform));
 
     while (!glfwWindowShouldClose(window)) {
         process_input(window);
