@@ -6,6 +6,10 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 // clang-format on
@@ -150,6 +154,18 @@ int main() {
 #ifdef WIREFRAME_MODE
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 #endif // WIREFRAME_MODE
+
+    glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
+    glm::mat4 trans = glm::mat4(1.0f);
+    trans = glm::translate(trans, glm::vec3(1.0f, 1.0f, 0.0f));
+    vec = trans * vec;
+
+    std::cout << vec.x
+              << ", "
+              << vec.y
+              << ", "
+              << vec.z
+              << '\n';
 
     shader_program.use();
     shader_program.set_uniform<int>("tex0", 0);
